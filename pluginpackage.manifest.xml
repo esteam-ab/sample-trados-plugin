@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+  <PlugInName>SampleTradosPlugin</PlugInName>
+	<!--<Version>14.1.1.13</Version>-->
+	<!--<Version>15.1.1.13</Version>-->
+	<!--<Version>16.1.1.13</Version>-->
+	<!--<Version>17.1.1.13</Version>-->
+	<Version>18.1.1.13</Version>
+  <Description>Plugin description</Description>
+  <Author></Author>
+	<!--<RequiredProduct name="SDLTradosStudio" minversion="14.0" maxversion="14.9" />-->
+	<!--<RequiredProduct name="SDLTradosStudio" minversion="15.0" maxversion="15.9" />-->
+	<!--<RequiredProduct name="SDLTradosStudio" minversion="16.0" maxversion="16.9" />-->
+	<!--<RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />-->
+	<RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
+</PluginPackage>
