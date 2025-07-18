@@ -84,10 +84,10 @@
 	<PropertyGroup>
 		<CreatePluginPackage>true</CreatePluginPackage>
 	</PropertyGroup>
-	<PropertyGroup>
+	<!-- <PropertyGroup>
 		<SignAssembly>true</SignAssembly>
 	</PropertyGroup>
 	<PropertyGroup>
 		<AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
-	</PropertyGroup>
+	</PropertyGroup> -->
 </Project>
