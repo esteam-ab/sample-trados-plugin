@@ -14,6 +14,8 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using SampleTradosPlugin.Controls;
+using SampleTradosPlugin.View;
+using Sdl.ProjectAutomation.Core;
 
 namespace SampleTradosPlugin.ViewModel
 {
@@ -21,6 +23,7 @@ namespace SampleTradosPlugin.ViewModel
 	{
 		private readonly EditorController _editorController;
 		private readonly SegmentVisitor _segmentVisitor;
+		private readonly SampleTradosPluginView _view;
 		// Support for 2021-2022 versions
 		private IStudioDocument _activeDocument;
 		// Support for 2017-2019 versions
@@ -29,14 +32,15 @@ namespace SampleTradosPlugin.ViewModel
 		private SampleTradosPluginModel _sampleTradosPluginModel;
 		private List<TabItem> _activeTabs;
 
-		public SampleTradosPluginViewModel()
+		public SampleTradosPluginViewModel(SampleTradosPluginView view, EditorController editorController)
 		{
+			_view = view;
+			_editorController = editorController;
 			_segmentVisitor = new SegmentVisitor(true);
 			_comments = new List<IComment>();
 			_sampleTradosPluginModel = new SampleTradosPluginModel();
             _activeTabs = new List<TabItem> { new SampleTabItem() };
 
-			_editorController = SampleTradosPluginInitializer.EditorController;
 			_editorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
 
 			SetActiveDocument(_editorController.ActiveDocument);
@@ -118,17 +122,14 @@ namespace SampleTradosPlugin.ViewModel
 			// Quick solution to release v.1.0
 			try
 			{
-				var file = _activeDocument.ActiveFile;
-				if (_activeDocument.ActiveFile == null)
+				var file = GetActiveFile(_activeDocument);
+				if (file == null)
 				{
 					// string.Format("ContentChanged level active document has no active file but has {0} files part of it.", ActiveDocument.Files.Count())
 					return;
 				}
-				if (file != null)
-				{
-					// refresh the highlighting/text-difference of the target segment of the Translation Results tab
-					UpdateTranslationResultsTargetText(e);
-				}
+				// refresh the highlighting/text-difference of the target segment of the Translation Results tab
+				UpdateTranslationResultsTargetText(e);
 			}
             catch (Exception)
             {
@@ -181,7 +182,7 @@ namespace SampleTradosPlugin.ViewModel
 
             _activeDocument = document;
 
-            if (_activeDocument != null && _activeDocument.ActiveFile != null)
+            if (_activeDocument != null && GetActiveFile(_activeDocument) != null)
             {
                 _activeDocument.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
                 _activeDocument.ContentChanged += ActiveDocument_ContentChanged;
@@ -245,6 +246,29 @@ namespace SampleTradosPlugin.ViewModel
 
 			OnPropertyChanged(nameof(InformationBoxModel));
 		}
+
+        private ProjectFile GetActiveFile(IStudioDocument document)
+        {
+            try
+            {
+                if (document?.ActiveFile != null)
+                {
+                    return document.ActiveFile;
+                }
+
+                var file = document?.Files?.FirstOrDefault();
+                if (file != null)
+                {
+                    return file;
+                }
+            }
+            catch
+            {
+                throw new Exception("Document files object is null");
+            }
+
+            return null;
+        }
 
 	}
 }

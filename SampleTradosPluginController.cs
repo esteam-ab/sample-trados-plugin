@@ -4,10 +4,6 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace SampleTradosPlugin
 {
@@ -20,30 +16,22 @@ namespace SampleTradosPlugin
     [ViewPartLayout(typeof(EditorController), Dock = DockType.Top)]
     public class SampleTradosPluginController : AbstractViewPartController
     {
-        // Support for 2021-2022 versions
-        private readonly SampleTradosPluginView _control = new SampleTradosPluginView();
+        private SampleTradosPluginView _view;
+        private SampleTradosPluginViewModel _viewModel;
+        private EditorController _editorController;
 
         protected override IUIControl GetContentControl()
         {
-            return _control;
+            return _view;
         }
-
         protected override void Initialize()
         {
-            var dataContext = new SampleTradosPluginViewModel();
-            _control.DataContext = dataContext;
+            _editorController = SdlTradosStudio.Application.GetController<EditorController>();
+            
+            _view = new SampleTradosPluginView();
+            _viewModel = new SampleTradosPluginViewModel(_view, _editorController);
+
+            _view.DataContext = _viewModel;
         }
-
-        // Support for 2017-2019 versions
-        //private readonly InformationBoxControl _control = new InformationBoxControl();
-
-        //protected override Control GetContentControl()
-        //{
-        //    return _control;
-        //}
-
-        //protected override void Initialize()
-        //{
-        //}
     }
 }
